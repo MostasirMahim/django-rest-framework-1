@@ -25,3 +25,15 @@ def studentsView(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def studentDetailsView(request, id):
+    try:
+        student = Student.objects.get(id=id)
+    except Student.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'GET':
+        serialer = StudentSerializer(student)
+        return Response(serialer.data, status=status.HTTP_200_OK)
+    return Response(status=status.HTTP_404_NOT_FOUND)
